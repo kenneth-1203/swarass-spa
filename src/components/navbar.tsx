@@ -1,69 +1,48 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-
-const STAGGER_DELAY = 0.1;
-const CHILDREN_DELAY = 0.2;
-
-const Navbar = ({
-  isHidden,
+import {
+  AnimatePresence,
+  motion,
+  useMotionValueEvent,
+  useScroll,
+} from "framer-motion";
+import {
+  HAMBURGER_ANIMATION_VARIANTS,
+  HAMBURGER_CHILD_VARIANTS,
   tabs,
-  currentTab,
-  selectTab,
-}: {
-  isHidden: boolean;
-  tabs: string[];
-  currentTab: string;
-  selectTab: (text: string) => void;
-}) => {
+} from "@/lib/constants";
+import { useScrollAction } from "@/hooks/use-scroll-action";
+import { useAppContext } from "./providers/app-context-provider";
+
+const Navbar = () => {
+  const { handleScrollTab } = useScrollAction();
+  const { currentTab, setCurrentTab, shouldHideNav, setShouldHideNav } =
+    useAppContext();
+  const { scrollY } = useScroll();
+
+  const [lastScrollY, setLastScrollY] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
-
-  const HAMBURGER_ANIMATION_VARIANTS = {
-    open: {
-      y: 0,
-      x: 0,
-      scale: 1,
-      borderRadius: "0%",
-      transition: {
-        ease: "easeInOut",
-        staggerChildren: STAGGER_DELAY,
-        delayChildren: CHILDREN_DELAY,
-      },
-    },
-    close: {
-      y: -200,
-      x: 100,
-      scale: 0,
-      borderRadius: "100%",
-      transition: {
-        ease: "easeInOut",
-        staggerChildren: STAGGER_DELAY,
-        staggerDirection: -1,
-        delay: tabs.length * STAGGER_DELAY,
-      },
-    },
-  };
-
-  const HAMBURGER_CHILD_VARIANTS = {
-    open: {
-      opacity: 1,
-      y: 0,
-    },
-    close: {
-      opacity: 0,
-      y: 10,
-    },
-  };
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
+  useMotionValueEvent(scrollY, "change", (latest: number) => {
+    handleScrollTab(setCurrentTab, latest);
+    if (latest > lastScrollY && latest > 50) {
+      setShouldHideNav(true);
+    } else {
+      setShouldHideNav(false);
+    }
+
+    setLastScrollY(latest);
+  });
+
   return (
     <nav className="fixed top-0 flex w-full justify-between z-[100]">
       <motion.div
-        animate={isHidden ? { y: -80 } : { y: 0 }}
+        animate={shouldHideNav ? { y: -80 } : { y: 0 }}
         transition={{ ease: "linear", duration: 0.2 }}
         className="hidden md:flex justify-center items-center gap-2 sm:gap-8 mx-auto p-4 backdrop-blur-md w-full border-b border-foreground/5"
       >
@@ -71,7 +50,7 @@ const Navbar = ({
           <Tab
             text={tab}
             selected={currentTab === tab}
-            selectTab={selectTab}
+            selectTab={() => setCurrentTab(tab)}
             key={tab}
           />
         ))}
@@ -101,7 +80,7 @@ const Navbar = ({
                   className="text-6xl font-semibold"
                   variants={HAMBURGER_CHILD_VARIANTS}
                   onClick={() => {
-                    selectTab(tab);
+                    setCurrentTab(tab);
                     setIsOpen(false);
                   }}
                 >

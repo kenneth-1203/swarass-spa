@@ -1,12 +1,10 @@
 import Image from "next/image";
 import Button from "@/components/button";
 import TextReveal from "@/components/text-reveal";
+import { useAppContext } from "@/components/providers/app-context-provider";
 
-const Home = ({
-  selectTab,
-}: {
-  selectTab: (text: string) => void;
-}) => {
+const Home = () => {
+  const { setCurrentTab } = useAppContext();
   return (
     <section id={"Home"} className="relative flex h-dvh p-8">
       <Image
@@ -40,13 +38,22 @@ const Home = ({
               Delivering Interior Excellence.
             </p>
             <div className="flex gap-4">
-              <Button variant="outline" onClick={() => selectTab("services")}>
+              <Button
+                variant="outline"
+                onClick={() => setCurrentTab("services")}
+              >
                 Services
               </Button>
-              <Button variant="outline" onClick={() => selectTab("activities")}>
+              <Button
+                variant="outline"
+                onClick={() => setCurrentTab("activities")}
+              >
                 Activities
               </Button>
-              <Button variant="outline" onClick={() => selectTab("contact")}>
+              <Button
+                variant="outline"
+                onClick={() => setCurrentTab("contact")}
+              >
                 Contact
               </Button>
             </div>
