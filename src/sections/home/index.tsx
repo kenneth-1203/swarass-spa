@@ -77,7 +77,7 @@ const Home = () => {
                 transition={{ delay: 1 }}
                 variants={BUTTON_VARIANTS}
               >
-                <Button variant="outline" onClick={() => scrollTo("Services")}>
+                <Button variant="primary" onClick={() => scrollTo("Services")}>
                   Services
                 </Button>
               </motion.span>
@@ -88,7 +88,7 @@ const Home = () => {
                 variants={BUTTON_VARIANTS}
               >
                 <Button
-                  variant="outline"
+                  variant="primary"
                   onClick={() => scrollTo("Activities")}
                 >
                   Activities
@@ -100,7 +100,7 @@ const Home = () => {
                 transition={{ delay: 1.4 }}
                 variants={BUTTON_VARIANTS}
               >
-                <Button variant="outline" onClick={() => scrollTo("Contact")}>
+                <Button variant="primary" onClick={() => scrollTo("Contact")}>
                   Contact
                 </Button>
               </motion.span>

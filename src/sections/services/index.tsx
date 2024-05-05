@@ -1,7 +1,14 @@
-"use client"
+"use client";
 
-import { Dispatch, SetStateAction, useMemo, useState } from "react";
-import { motion } from "framer-motion";
+import {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { motion, useInView } from "framer-motion";
 import Card from "@/components/card";
 import {
   EventConsultancy,
@@ -44,8 +51,28 @@ const cards = [
   },
 ];
 
+const ANIMATE_ON_VIEW = {
+  once: true,
+  margin: "0px 0px -50% 0px",
+};
+
+const VARIANTS = {
+  visible: { opacity: 1, x: 0 },
+  hidden: { opacity: 0, x: 20 },
+};
+
 const Services = () => {
   const [selected, setSelected] = useState(tabs[0]);
+  const firstContainerRef = useRef(null);
+  const secondContainerRef = useRef(null);
+
+  const firstInView = useInView(firstContainerRef, ANIMATE_ON_VIEW);
+  const secondInView = useInView(secondContainerRef, ANIMATE_ON_VIEW);
+
+  useEffect(() => {
+    console.log("First: ", firstInView);
+    console.log("Second: ", secondInView);
+  }, [firstInView, secondInView]);
 
   const tabContent = useMemo(() => {
     switch (selected) {
@@ -63,8 +90,16 @@ const Services = () => {
   }, [selected]);
 
   return (
-    <section id={"Services"} className="flex flex-col my-12 sm:my-20">
-      <div className="pb-8 md:pb-20">
+    <section
+      ref={firstContainerRef}
+      id={"Services"}
+      className="flex flex-col my-12 sm:my-20"
+    >
+      <motion.div
+        animate={firstInView ? "visible" : "hidden"}
+        variants={VARIANTS}
+        className="pb-8 md:pb-20"
+      >
         <h1 className="mx-auto w-fit text-2xl sm:text-4xl font-semibold mb-8">
           Services
           <span className="flex mx-auto h-1.5 w-1/2 bg-primary my-2" />
@@ -79,32 +114,39 @@ const Services = () => {
             />
           ))}
         </div>
-      </div>
-      <div className="flex flex-col md:flex-row mx-auto">
-        <div className="min-w-[12rem] flex flex-wrap md:flex-nowrap justify-center md:justify-start md:flex-col md:gap-4 p-4 md:p-8">
-          {tabs.map((tab) => (
-            <Tab
-              text={tab}
-              selected={selected === tab}
-              setSelected={setSelected}
-              key={tab}
-            />
-          ))}
-        </div>
-        <div className="flex flex-col justify-center max-w-[50rem] text-sm md:text-base">
-          {selected && (
-            <motion.div
-              key={selected}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="relative p-8 mr-4"
-            >
-              {tabContent}
-              <div className="absolute triangle-tr bg-primary w-8 h-8 right-0 top-0"></div>
-              <div className="absolute triangle-tr border-[0.5rem] border-foreground w-16 h-16 right-2 top-2"></div>
-            </motion.div>
-          )}
-        </div>
+      </motion.div>
+      <div ref={secondContainerRef}>
+        <motion.div
+          animate={secondInView ? "visible" : "hidden"}
+          variants={VARIANTS}
+          className="flex flex-col justify-center md:flex-row mx-auto"
+        >
+          <div className="min-w-[12rem] flex flex-wrap md:flex-nowrap justify-center md:justify-start md:flex-col md:gap-4 p-4 md:p-8">
+            {tabs.map((tab) => (
+              <Tab
+                text={tab}
+                selected={selected === tab}
+                setSelected={setSelected}
+                key={tab}
+              />
+            ))}
+          </div>
+          <div className="flex flex-col justify-center max-w-[50rem] text-sm md:text-base">
+            {selected && (
+              <motion.div
+                key={selected}
+                initial="hidden"
+                animate="visible"
+                variants={VARIANTS}
+                className="relative p-8 mr-4"
+              >
+                {tabContent}
+                <div className="absolute triangle-tr bg-primary w-8 h-8 right-0 top-0"></div>
+                <div className="absolute triangle-tr border-[0.5rem] border-foreground w-16 h-16 right-2 top-2"></div>
+              </motion.div>
+            )}
+          </div>
+        </motion.div>
       </div>
     </section>
   );
