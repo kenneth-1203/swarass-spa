@@ -13,7 +13,7 @@ const Button = ({ children, variant = "primary", ...props }: Props) => {
       <button
         {...props}
         className={cn(
-          "px-2 py-1 sm:px-4 sm:py-2 rounded-full transition-colors text-sm sm:text-lg",
+          "px-3 py-1.5 sm:px-4 sm:py-2 rounded-full transition-colors text-sm sm:text-lg",
           {
             "bg-primary text-background":
               variant === "primary",

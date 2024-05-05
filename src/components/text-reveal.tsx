@@ -46,7 +46,7 @@ const TextReveal = ({
                   initial={{
                     opacity: 0,
                     rotateX: -90,
-                    y: 45,
+                    y: 90,
                   }}
                   animate={{
                     opacity: 1,
@@ -56,7 +56,7 @@ const TextReveal = ({
                   exit={{
                     opacity: 0,
                     rotateX: 90,
-                    y: -45,
+                    y: -90,
                   }}
                   transition={{
                     delay: countRef.current * stagger,
@@ -65,7 +65,7 @@ const TextReveal = ({
                     type: "spring",
                     duration: 0.5,
                   }}
-                  className="inline-block"
+                  className="inline-block origin-bottom"
                   key={letterIndex}
                 >
                   {letter}

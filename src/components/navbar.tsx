@@ -3,14 +3,51 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAppContext } from "./providers/app-context-provider";
-import {
-  HAMBURGER_ANIMATION_VARIANTS,
-  HAMBURGER_CHILD_VARIANTS,
-  tabs,
-} from "@/lib/constants";
+import { tabs } from "@/lib/constants";
+
+const STAGGER_DELAY = 0.1;
+const CHILDREN_DELAY = 0.2;
+
+const HAMBURGER_ANIMATION_VARIANTS = {
+  open: {
+    y: 0,
+    x: 0,
+    scale: 1,
+    borderRadius: "0%",
+    transition: {
+      ease: "easeInOut",
+      staggerChildren: STAGGER_DELAY,
+      delayChildren: CHILDREN_DELAY,
+    },
+  },
+  close: {
+    y: -200,
+    x: 100,
+    scale: 0,
+    borderRadius: "100%",
+    transition: {
+      ease: "easeInOut",
+      staggerChildren: STAGGER_DELAY,
+      staggerDirection: -1,
+      delay: tabs.length * STAGGER_DELAY,
+    },
+  },
+};
+
+const HAMBURGER_CHILD_VARIANTS = {
+  open: {
+    opacity: 1,
+    y: 0,
+  },
+  close: {
+    opacity: 0,
+    y: 10,
+  },
+};
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [clickable, setClickable] = useState(true);
   const { currentTab, scrollTo, shouldHideNav } = useAppContext();
 
   const toggleMenu = () => {
@@ -19,6 +56,7 @@ const Navbar = () => {
 
   return (
     <nav className="fixed top-0 flex w-full justify-between z-[100]">
+      {/* Desktop View */}
       <motion.div
         initial={{ y: -80 }}
         animate={shouldHideNav ? { y: -80 } : { y: 0 }}
@@ -34,12 +72,16 @@ const Navbar = () => {
           />
         ))}
       </motion.div>
+
+      {/* Mobile View */}
       <div className="md:hidden">
         <div className="absolute right-0 top-0 flex select-none">
           <motion.div
-            whileHover={{ scale: 1.1 }}
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            whileTap={{ scale: 0.9 }}
             className="flex items-center justify-center w-14 h-14 bg-background m-4 rounded-full shadow-md z-10"
-            onClick={toggleMenu}
+            onClick={clickable ? () => toggleMenu() : undefined}
           >
             <HamburgerToXIcon isOpen={isOpen} />
           </motion.div>
@@ -51,6 +93,8 @@ const Navbar = () => {
               animate="open"
               exit="close"
               variants={HAMBURGER_ANIMATION_VARIANTS}
+              onAnimationStart={() => setClickable(false)}
+              onAnimationComplete={() => setClickable(true)}
               className="fixed flex flex-col gap-2 bg-background h-dvh w-full origin-top-right p-8"
             >
               {tabs.map((tab) => (
