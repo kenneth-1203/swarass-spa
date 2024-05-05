@@ -1,5 +1,3 @@
-"use client";
-
 import Navbar from "@/components/navbar";
 import Home from "@/sections/home";
 import Services from "@/sections/services";

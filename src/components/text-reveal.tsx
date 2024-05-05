@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -5,17 +7,25 @@ const ONE_SECOND = 1000;
 const WAIT_TIME = ONE_SECOND * 5;
 const STAGGER = 0.1;
 
-const TextReveal = ({ phrases }: { phrases: string[] }) => {
+const TextReveal = ({
+  phrases,
+  stagger = STAGGER,
+  waitTime = WAIT_TIME,
+}: {
+  phrases: string[];
+  stagger?: number;
+  waitTime?: number;
+}) => {
   const countRef = useRef(0);
   const [active, setActive] = useState(0);
 
   useEffect(() => {
     const intervalRef = setInterval(() => {
       setActive((pv) => (pv + 1) % phrases.length);
-    }, WAIT_TIME);
+    }, waitTime);
 
     return () => clearInterval(intervalRef);
-  }, [phrases]);
+  }, [phrases, waitTime]);
 
   return (
     <AnimatePresence mode="popLayout">
@@ -49,7 +59,7 @@ const TextReveal = ({ phrases }: { phrases: string[] }) => {
                     y: -45,
                   }}
                   transition={{
-                    delay: countRef.current * STAGGER,
+                    delay: countRef.current * stagger,
                     damping: 40,
                     stiffness: 400,
                     type: "spring",

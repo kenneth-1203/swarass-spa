@@ -1,56 +1,35 @@
 "use client";
 
 import { useState } from "react";
-import {
-  AnimatePresence,
-  motion,
-  useMotionValueEvent,
-  useScroll,
-} from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useAppContext } from "./providers/app-context-provider";
 import {
   HAMBURGER_ANIMATION_VARIANTS,
   HAMBURGER_CHILD_VARIANTS,
   tabs,
 } from "@/lib/constants";
-import { useScrollAction } from "@/hooks/use-scroll-action";
-import { useAppContext } from "./providers/app-context-provider";
 
 const Navbar = () => {
-  const { handleScrollTab } = useScrollAction();
-  const { currentTab, setCurrentTab, shouldHideNav, setShouldHideNav } =
-    useAppContext();
-  const { scrollY } = useScroll();
-
-  const [lastScrollY, setLastScrollY] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
+  const { currentTab, scrollTo, shouldHideNav } = useAppContext();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
-  useMotionValueEvent(scrollY, "change", (latest: number) => {
-    handleScrollTab(setCurrentTab, latest);
-    if (latest > lastScrollY && latest > 50) {
-      setShouldHideNav(true);
-    } else {
-      setShouldHideNav(false);
-    }
-
-    setLastScrollY(latest);
-  });
-
   return (
     <nav className="fixed top-0 flex w-full justify-between z-[100]">
       <motion.div
+        initial={{ y: -80 }}
         animate={shouldHideNav ? { y: -80 } : { y: 0 }}
-        transition={{ ease: "linear", duration: 0.2 }}
+        transition={{ ease: "easeInOut", duration: 0.2 }}
         className="hidden md:flex justify-center items-center gap-2 sm:gap-8 mx-auto p-4 backdrop-blur-md w-full border-b border-foreground/5"
       >
         {tabs.map((tab) => (
           <Tab
             text={tab}
             selected={currentTab === tab}
-            selectTab={() => setCurrentTab(tab)}
+            selectTab={() => scrollTo(tab)}
             key={tab}
           />
         ))}
@@ -80,7 +59,7 @@ const Navbar = () => {
                   className="text-6xl font-semibold"
                   variants={HAMBURGER_CHILD_VARIANTS}
                   onClick={() => {
-                    setCurrentTab(tab);
+                    scrollTo(tab);
                     setIsOpen(false);
                   }}
                 >

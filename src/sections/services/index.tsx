@@ -1,3 +1,5 @@
+"use client"
+
 import { Dispatch, SetStateAction, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import Card from "@/components/card";
@@ -61,7 +63,7 @@ const Services = () => {
   }, [selected]);
 
   return (
-    <section id={"Services"} className="flex flex-col my-12">
+    <section id={"Services"} className="flex flex-col my-12 sm:my-20">
       <div className="pb-8 md:pb-20">
         <h1 className="mx-auto w-fit text-2xl sm:text-4xl font-semibold mb-8">
           Services
