@@ -14,6 +14,35 @@ const Contact = () => {
         Contact
         <span className="flex mx-auto h-1.5 w-1/2 bg-primary my-2" />
       </h1>
+      <div className="text-md grid grid-cols-1 gap-4 sm:gap-0 sm:grid-cols-3 max-w-[50rem] mx-auto mt-8">
+        <div className="flex flex-col text-center">
+          <p className="font-bold uppercase mb-2">Call us</p>
+          <a className="font-light" href="tel:+60162334339">
+            Adeline - 016&nbsp;233&nbsp;4339
+          </a>
+          <a className="font-light" href="tel:+60123341117">
+            Ian - 012&nbsp;334&nbsp;1117
+          </a>
+        </div>
+        <div className="flex flex-col text-center">
+          <p className="text-md font-bold uppercase">Email</p>
+          <a className="font-light" href="mailto:adeline@swarass.asia">
+            adeline@swarass.asia
+          </a>
+          <a className="font-light" href="mailto:ian@swarass.asia">
+            ian@swarass.asia
+          </a>
+          <a className="font-light" href="mailto:info@swarass.asia">
+            info@swarass.asia
+          </a>
+        </div>
+        <div className="text-center">
+          <p className="text-md font-bold uppercase">Address</p>
+          <p className="font-light">
+            No.7, Jalan Rajawali 1A Bandar Puchong Jaya 47100 Puchong Selangor
+          </p>
+        </div>
+      </div>
       <div className="relative w-[300px] sm:w-[600px] h-[12rem] sm:h-[20rem] mx-auto">
         <Image
           src={"/images/map.png"}

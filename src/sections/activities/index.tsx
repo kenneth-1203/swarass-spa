@@ -45,22 +45,25 @@ const items = [
 const Activities = () => {
   return (
     <section id="Activities" className="relative bg-background mb-20">
-      <TextParallaxContent>
-        <h1 className="mx-auto w-fit text-2xl sm:text-4xl font-semibold mb-8">
+      <div className="sticky z-50 top-0 bg-background w-full py-3">
+        <h1 className="mx-auto w-fit text-2xl sm:text-4xl font-semibold">
           Activities
           <span className="flex mx-auto h-1.5 w-1/2 bg-primary my-2" />
         </h1>
+      </div>
+      <TextParallaxContent>
         <div className="relative h-full w-full flex items-center justify-center">
           {items.map((card, index) => (
             <motion.div
               key={index}
               initial="hidden"
               whileInView={"visible"}
+              exit="hidden"
               className={`absolute flex items-center justify-center w-full h-screen`}
-              style={{ top: `${index * 100}vh` }}
+              style={{ top: `${index * 80}vh` }}
               variants={INVIEW_ANIMATION_VARIANTS}
               viewport={{
-                margin: "0px 0px -400px 0px",
+                margin: "0px 0px -600px 0px",
               }}
             >
               <Card

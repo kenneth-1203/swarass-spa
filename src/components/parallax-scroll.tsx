@@ -14,7 +14,7 @@ export const TextParallaxContent = ({ children }: { children: ReactNode }) => {
         paddingRight: IMG_PADDING,
       }}
     >
-      <div className="relative h-[600vh]">
+      <div className="relative h-[500dvh]">
         <StickyVideo />
         <OverlayCopy>{children}</OverlayCopy>
       </div>
