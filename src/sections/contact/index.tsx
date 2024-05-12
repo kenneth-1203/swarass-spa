@@ -8,6 +8,10 @@ import { FaFacebookF, FaInstagram, FaPinterestP } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 
 const Contact = () => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
+
   return (
     <section id="Contact" className="px-8">
       <h1 className="mx-auto w-fit text-2xl sm:text-4xl font-semibold mb-8">
@@ -53,7 +57,7 @@ const Contact = () => {
           fill
         />
       </div>
-      <form className="space-y-4 max-w-[50rem] mx-auto">
+      <form className="space-y-4 max-w-[50rem] mx-auto" onSubmit={handleSubmit}>
         <div className="flex items-center mx-auto">
           <div className="triangle-r w-3 h-4 bg-primary mr-3"></div>
           <label
