@@ -1,14 +1,22 @@
 "use client";
 
-import { Dispatch, SetStateAction, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import Card from "@/components/card";
+import { useMediaQuery } from "react-responsive";
+import Card from "@/components/card-image";
+import {
+  INVIEW_ANIMATION_VARIANTS,
+  INVIEW_ANIMATION_VIEWPORT,
+  INVIEW_ANIMATION_TRANSITION,
+} from "@/lib/animations";
 import {
   EventConsultancy,
   Exhibition,
   StagingProductions,
   TechnicalManagement,
 } from "./contents";
+import useTimer from "@/lib/hooks";
+import { cn } from "@/lib/utils";
 
 const tabs = [
   "Event Consultancy",
@@ -44,24 +52,26 @@ const cards = [
   },
 ];
 
-const ANIMATION_VARIANTS = {
-  visible: { opacity: 1, scale: 1, y: 0 },
-  hidden: { opacity: 0, scale: 0.8, y: 50 },
-};
-
-const ANIMATION_TRANSITION = {
-  damping: 10,
-  duration: 0.4,
-  stiffness: 100,
-  type: "spring",
-};
-
-const ANIMATION_VIEWPORT = {
-  once: true,
-};
-
 const Services = () => {
   const [selected, setSelected] = useState(tabs[0]);
+  const { secondsLeft, startTimer, resetTimer } = useTimer(5);
+
+  useEffect(() => {
+    startTimer();
+  }, []);
+
+  useEffect(() => {
+    if (secondsLeft === 0) {
+      const currentIndex = tabs.findIndex((tab) => tab === selected);
+      const nextIndex = currentIndex + 1 >= tabs.length ? 0 : currentIndex + 1;
+      handleSelectTab(tabs[nextIndex]);
+    }
+  }, [secondsLeft, selected]);
+
+  const handleSelectTab = (tab: string) => {
+    setSelected(tab);
+    resetTimer();
+  };
 
   const tabContent = useMemo(() => {
     switch (selected) {
@@ -79,8 +89,11 @@ const Services = () => {
   }, [selected]);
 
   return (
-    <section id={"Services"} className="flex flex-col my-12 sm:my-20">
-      <div className="pb-8 md:pb-20">
+    <section
+      id={"Services"}
+      className="flex flex-col py-12 sm:py-20 bg-background"
+    >
+      <div className="mb-20">
         <h1 className="mx-auto w-fit text-2xl sm:text-4xl font-semibold mb-12">
           Services
           <span className="flex mx-auto h-1.5 w-1/2 bg-primary my-2" />
@@ -91,8 +104,8 @@ const Services = () => {
               key={card.heading}
               initial="hidden"
               whileInView={"visible"}
-              variants={ANIMATION_VARIANTS}
-              viewport={ANIMATION_VIEWPORT}
+              variants={INVIEW_ANIMATION_VARIANTS}
+              viewport={INVIEW_ANIMATION_VIEWPORT}
             >
               <Card
                 imgSrc={`/images/${card.imgSrc}`}
@@ -106,17 +119,17 @@ const Services = () => {
       <motion.div
         initial={"hidden"}
         whileInView={"visible"}
-        variants={ANIMATION_VARIANTS}
-        transition={ANIMATION_TRANSITION}
-        viewport={ANIMATION_VIEWPORT}
+        variants={INVIEW_ANIMATION_VARIANTS}
+        transition={INVIEW_ANIMATION_TRANSITION}
+        viewport={INVIEW_ANIMATION_VIEWPORT}
         className="flex flex-col justify-center md:flex-row"
       >
-        <div className="min-w-[12rem] flex flex-wrap md:flex-nowrap justify-center md:justify-start md:flex-col md:gap-4 p-4 pr-0 md:p-8 md:pr-0">
+        <div className="min-w-[18.5rem] flex flex-wrap md:flex-nowrap justify-center md:justify-start md:flex-col md:gap-4 md:pl-8 md:py-8">
           {tabs.map((tab) => (
             <Tab
               text={tab}
               selected={selected === tab}
-              setSelected={setSelected}
+              handleSelectTab={handleSelectTab}
               key={tab}
             />
           ))}
@@ -127,12 +140,12 @@ const Services = () => {
               key={selected}
               initial="hidden"
               animate="visible"
-              variants={ANIMATION_VARIANTS}
-              className="relative px-8 pt-8 mr-8"
+              variants={INVIEW_ANIMATION_VARIANTS}
+              className="relative px-16 pt-8"
             >
               {tabContent}
-              <div className="absolute triangle-tr bg-primary w-8 h-8 right-0 top-0"></div>
-              <div className="absolute triangle-tr border-[0.5rem] border-foreground w-16 h-16 right-2 top-2"></div>
+              <div className="absolute triangle-tr bg-primary w-8 h-8 right-5 top-0"></div>
+              <div className="absolute triangle-tr border-[0.5rem] border-foreground w-16 h-16 right-7 top-2"></div>
             </motion.div>
           )}
         </div>
@@ -144,24 +157,30 @@ const Services = () => {
 const Tab = ({
   text,
   selected,
-  setSelected,
+  handleSelectTab,
 }: {
   text: string;
   selected: boolean;
-  setSelected: Dispatch<SetStateAction<string>>;
+  handleSelectTab: (tab: string) => void;
 }) => {
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   return (
     <motion.button
-      onClick={() => setSelected(text)}
-      className="w-fit sm:text-start text-sm md:text-lg lg:text-xl font-semibold capitalize transition-colors p-2 rounded-md relative origin-left"
+      onClick={() => handleSelectTab(text)}
+      className="w-fit sm:text-start text-sm md:text-lg lg:text-xl font-semibold capitalize transition-colors p-2 md:p-0 md:py-2 rounded-md relative origin-left"
     >
-      <span className="relative z-10 sm:pr-4">{text}</span>
+      <motion.span
+        animate={!isMobile ? { paddingLeft: selected ? 20 : 0 } : {}}
+        className="relative z-10 md:pr-4"
+      >
+        {text}
+      </motion.span>
       {selected && (
         <>
           <motion.span
             layoutId="service-tab"
             transition={{ type: "spring", duration: 0.5 }}
-            className="hidden md:flex absolute ml-auto my-auto inset-0 z-0 w-2.5 h-4 bg-primary triangle-r"
+            className="hidden md:flex absolute mr-auto my-auto inset-0 z-0 w-2.5 h-4 bg-primary triangle-r"
           ></motion.span>
           <motion.span
             layoutId="mobile-service-tab"

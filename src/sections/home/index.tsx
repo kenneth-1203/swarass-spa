@@ -32,9 +32,6 @@ const Home = () => {
         fill
         priority
       />
-      {/* <video className="object-cover" loop autoPlay muted playsInline>
-            <source src="/bg-video.mp4" type="video/mp4" />
-          </video> */}
       <div className="h-full w-full flex flex-col xl:px-20">
         <div className="relative flex mt-16">
           <motion.div
@@ -46,7 +43,7 @@ const Home = () => {
           <motion.div
             initial={{ opacity: 0, x: -40, y: 40, scale: 0 }}
             animate={{ opacity: 1, x: 0, y: 0, scale: 1 }}
-            transition={{ delay: 0.5 }}
+            transition={{ delay: 0.6 }}
             className="absolute right-0 top-0 max-[420px]:w-42 max-[420px]:h-42 mt-4 mr-4 xl:mr-10 xl:mt-10 border-[1.5rem] border-foreground h-28 w-28 md:h-28 md:w-28 lg:h-36 lg:w-36 xl:w-48 xl:h-48 triangle-tr"
           />
         </div>

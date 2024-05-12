@@ -15,13 +15,10 @@ const Card = ({
       transition={{
         staggerChildren: 0.035,
       }}
-      whileInView="hover"
-      viewport={{
-        margin: "0px 0px -400px 0px",
-      }}
-      className="max-w-[72rem] bg-transparent overflow-hidden cursor-pointer group relative"
+      whileHover="hover"
+      className="w-full h-52 sm:h-64 bg-background overflow-hidden cursor-pointer group relative"
     >
-      {/* <Image
+      <Image
         src={imgSrc}
         className="absolute inset-0 blur-sm scale-[1.05] saturate-100 md:saturate-0 md:group-hover:saturate-100 group-hover:scale-[1.15] group-hover:blur-none transition-all duration-500 object-cover object-center"
         loading="eager"
@@ -29,15 +26,15 @@ const Card = ({
         alt={`${heading} image`}
         fill
         priority
-      /> */}
-      <div className="p-4 px-8 relative z-20 h-full text-background group-hover:text-white transition-colors duration-500 flex flex-col justify-end">
-        <div className="relative flex flex-col h-full justify-between">
-          <h4 className="border-b-4 border-primary" aria-label={heading}>
+      />
+      <div className="p-4 relative z-20 h-full text-background group-hover:text-white transition-colors duration-500 flex flex-col justify-end">
+        <div className="flex flex-col h-full justify-between">
+          <h4 aria-label={heading}>
             {heading.split("").map((l, i) => (
               <ShiftLetter letter={l} key={i} />
             ))}
           </h4>
-          <p className="text-shadow text-sm font-medium text-background/60 md:text-xl lg:text-2xl mt-6">
+          <p className="text-shadow text-sm md:text-md lg:text-lg">
             {description}
           </p>
         </div>

@@ -1,4 +1,5 @@
 import Navbar from "@/components/navbar";
+import Footer from "@/components/footer";
 import Home from "@/sections/home";
 import Services from "@/sections/services";
 import Activities from "@/sections/activities";
@@ -12,7 +13,7 @@ export default function Page() {
       <Services />
       <Activities />
       <Contact />
-      <footer></footer>
+      <Footer />
     </main>
   );
 }

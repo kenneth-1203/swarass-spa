@@ -4,6 +4,9 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAppContext } from "./providers/app-context-provider";
 import { tabs } from "@/lib/constants";
+import Image from "next/image";
+import { FaFacebookF, FaInstagram, FaPinterestP } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 
 const STAGGER_DELAY = 0.1;
 const CHILDREN_DELAY = 0.2;
@@ -51,6 +54,7 @@ const Navbar = () => {
   const { currentTab, scrollTo, shouldHideNav } = useAppContext();
 
   const toggleMenu = () => {
+    if (!clickable) return;
     setIsOpen(!isOpen);
   };
 
@@ -61,16 +65,30 @@ const Navbar = () => {
         initial={{ y: -80 }}
         animate={shouldHideNav ? { y: -80 } : { y: 0 }}
         transition={{ ease: "easeInOut", duration: 0.2 }}
-        className="hidden md:flex justify-center items-center gap-2 sm:gap-8 mx-auto p-4 backdrop-blur-md w-full border-b border-foreground/5"
+        className="hidden md:flex items-center p-4 backdrop-blur-md w-full border-b border-foreground/5"
       >
-        {tabs.map((tab) => (
-          <Tab
-            text={tab}
-            selected={currentTab === tab}
-            selectTab={() => scrollTo(tab)}
-            key={tab}
+        <div className="relative w-12 h-12 ml-6 xl:ml-24">
+          <Image
+            src={"/images/logo.png"}
+            alt="Background image"
+            quality={100}
+            className="object-cover translate-y-1.5"
+            sizes="(min-width: 1200px) 33vw, (min-width: 768px) 50vw, 100vw"
+            loading="eager"
+            fill
+            priority
           />
-        ))}
+        </div>
+        <div className="flex mx-auto justify-center items-center gap-8">
+          {tabs.map((tab) => (
+            <Tab
+              text={tab}
+              selected={currentTab === tab}
+              selectTab={() => scrollTo(tab)}
+              key={tab}
+            />
+          ))}
+        </div>
       </motion.div>
 
       {/* Mobile View */}
@@ -81,7 +99,7 @@ const Navbar = () => {
             animate={{ scale: 1 }}
             whileTap={{ scale: 0.9 }}
             className="flex items-center justify-center w-14 h-14 bg-background m-4 rounded-full shadow-md z-10"
-            onClick={clickable ? () => toggleMenu() : undefined}
+            onClick={toggleMenu}
           >
             <HamburgerToXIcon isOpen={isOpen} />
           </motion.div>
@@ -97,6 +115,18 @@ const Navbar = () => {
               onAnimationComplete={() => setClickable(true)}
               className="fixed flex flex-col gap-2 bg-background h-dvh w-full origin-top-right p-8"
             >
+              <div className="relative w-12 h-12 mb-8">
+                <Image
+                  src={"/images/logo.png"}
+                  alt="Background image"
+                  quality={100}
+                  className="object-cover translate-y-1.5"
+                  sizes="(min-width: 1200px) 33vw, (min-width: 768px) 50vw, 100vw"
+                  loading="eager"
+                  fill
+                  priority
+                />
+              </div>
               {tabs.map((tab) => (
                 <motion.a
                   key={tab}
@@ -110,6 +140,39 @@ const Navbar = () => {
                   {tab}
                 </motion.a>
               ))}
+              <motion.div
+                variants={HAMBURGER_CHILD_VARIANTS}
+                className="mt-auto flex gap-3 text-primary"
+              >
+                <a
+                  href="http://facebook.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FaFacebookF className="w-10 h-10 hover:text-foreground transition-colors" />
+                </a>
+                <a
+                  href="http://twitter.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FaXTwitter className="w-10 h-10 hover:text-foreground transition-colors" />
+                </a>
+                <a
+                  href="http://pinterest.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FaPinterestP className="w-10 h-10 hover:text-foreground transition-colors" />
+                </a>
+                <a
+                  href="http://instagram.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FaInstagram className="w-10 h-10 hover:text-foreground transition-colors" />
+                </a>
+              </motion.div>
             </motion.div>
           ) : null}
         </AnimatePresence>
